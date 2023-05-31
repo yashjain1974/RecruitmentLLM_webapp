@@ -11,7 +11,8 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-os.environ["OPENAI_API_KEY"]
+os.environ["OPENAI_API_KEY"] = "ENTER API KEY HERE"
+
 
 
 @app.route('/')
