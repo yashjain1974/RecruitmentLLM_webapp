@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messaging App</title>
+  <style>
+    body {
+      background-color: #1f1f1f;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #292929;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .message-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      background-color: #333333;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+    }
+
+    .message p {
+      margin: 0;
+    }
+
+    .user-message {
+      background-color: #004a80;
+      align-self: flex-end;
+    }
+
+    .answer-message {
+      background-color: #006600;
+    }
+
+    .source-message {
+      background-color: #003366;
+    }
+
+    .message a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .input-container {
+      display: flex;
+      margin-top: 20px;
+    }
+
+    .input-container input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .input-container button {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      border: none;
+      color: #ffffff;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <div class="message-container" id="message-container">
+    <div class="message">
+      <p>Welcome to the messaging app! Enter your question below:</p>
+    </div>
+  </div>
+  <div class="input-container">
+    <input type="text" id="question-input" placeholder="Enter your question" onkeydown="handleKeyDown(event)">
+    <button onclick="submitQuestion()">Submit</button>
+  </div>
+</div>
+
+<script>
+  var questionInput = document.getElementById("question-input");
+  var submitButton = document.querySelector(".input-container button");
+
+  function handleKeyDown(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      submitQuestion();
+    }
+  }
+
+  function submitQuestion() {
+    var question = questionInput.value;
+
+    if (question.trim() === "") {
+      return;
+    }
+
+    questionInput.value = "";
+    questionInput.disabled = true;
+    submitButton.disabled = true;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/process_pdf", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        displayMessage(question, "user-message");
+        displayMessage(response.answer, "answer-message");
+        displaySources(response.sources);
+
+        questionInput.disabled = false;
+        submitButton.disabled = false;
+        questionInput.focus();
+      }
+    };
+
+    var data = JSON.stringify({ "question": question });
+    xhr.send(data);
+  }
+
+  function displayMessage(message, className) {
+    var messageContainer = document.getElementById("message-container");
+    var messageElement = document.createElement("div");
+    messageElement.classList.add("message", className);
+    messageElement.innerHTML = "<p>" + message + "</p>";
+    messageContainer.appendChild(messageElement);
+  }
+
+  function displaySources(sources) {
+    var messageContainer = document.getElementById("message-container");
+    var sourceMessage = document.createElement("div");
+    sourceMessage.classList.add("message", "source-message");
+    var sourcesHTML = "<p>Sources:</p><a href='" + sources + "' target='_blank'>" + sources + "</a>";
+    sourceMessage.innerHTML = sourcesHTML;
+    messageContainer.appendChild(sourceMessage);
+  }
+</script>
+</body>
+
+</html>
