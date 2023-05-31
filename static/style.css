@@ -20,7 +20,7 @@ nav .nav-text {
   font-size: 1.5rem;
   font-weight: 600;
 }
-.message {
+.message-off {
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
@@ -80,4 +80,68 @@ nav .nav-text {
   border: 0;
   background-color: white;
   color: #f5f5f5;
+}
+
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #292929;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  background-color: #333333;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.message p {
+  margin: 0;
+}
+
+.user-message {
+  background-color: #004a80;
+  align-self: flex-end;
+}
+
+.answer-message {
+  background-color: #006600;
+}
+
+.source-message {
+  background-color: #003366;
+}
+
+.message a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.input-container {
+  display: flex;
+  margin-top: 20px;
+}
+
+.input-container input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+}
+
+.input-container button {
+  padding: 10px 20px;
+  border: none;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
 }

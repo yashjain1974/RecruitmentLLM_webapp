@@ -5,80 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Messaging App</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../static/style.css">
   <style>
-    /* body {
-      background-color: #1f1f1f;
-      color: #ffffff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #292929;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .message-container {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .message {
-      background-color: #333333;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-    }
-
-    .message p {
-      margin: 0;
-    }
-
-    .user-message {
-      background-color: #004a80;
-      align-self: flex-end;
-    }
-
-    .answer-message {
-      background-color: #006600;
-    }
-
-    .source-message {
-      background-color: #003366;
-    }
-
-    .message a {
-      color: #ffffff;
-      text-decoration: none;
-    }
-
-    .input-container {
-      display: flex;
-      margin-top: 20px;
-    }
-
-    .input-container input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-    }
-
-    .input-container button {
-      padding: 10px 20px;
-      background-color: #4caf50;
-      border: none;
-      color: #ffffff;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-    } */
   </style>
 </head>
 
@@ -87,17 +15,17 @@
 
     <nav>
       <div class="nav-text">Home</div>
-      <img src="./images/brainlox_logo_without_bg.png" alt="logo" style="width: 8rem;">
+      <img src="../static/images/brainlox_logo_without_bg.png" alt="logo" style="width: 8rem;">
     </nav>
 
-    <div class="message">
+    <div class="message-off">
       <p><span style="color: #310036">Welcome to the messaging app!</span> <span style="color: #ff001b">Enter your
           question below</span></p>
     </div>
     <div class="chat-box">
       <div class="chat-view">
         <div class="chat-image">
-          <img src="./images/bot-image.png" alt="chatbot" class="image-bot">
+          <img src="../static/images/bot-image.png" alt="chatbot" class="image-bot">
         </div>
         <div class="chat-text">Ask me anything you want ?</div>
       </div>
@@ -105,7 +33,7 @@
       </div>
     </div>
 
-    <div class="input">
+    <div class="input input-container">
       <input class="input-field" id="question-input" type="text" placeholder="Enter Your Question"
         onkeydown="handleKeyDown(event)"></input>
       <button onclick="submitQuestion()" class="button-submit">
@@ -121,7 +49,6 @@
             </clipPath>
           </defs>
         </svg>
-
       </button>
     </div>
 
