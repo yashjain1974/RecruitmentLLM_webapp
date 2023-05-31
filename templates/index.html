@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Messaging App</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    body {
+    /* body {
       background-color: #1f1f1f;
       color: #ffffff;
       font-family: Arial, sans-serif;
@@ -77,83 +78,131 @@
       font-weight: bold;
       border-radius: 4px;
       cursor: pointer;
-    }
+    } */
   </style>
 </head>
 
 <body>
-<div class="container">
-  <div class="message-container" id="message-container">
+  <div class="">
+
+    <nav>
+      <div class="nav-text">Home</div>
+      <img src="./images/brainlox_logo_without_bg.png" alt="logo" style="width: 8rem;">
+    </nav>
+
     <div class="message">
-      <p>Welcome to the messaging app! Enter your question below:</p>
+      <p><span style="color: #310036">Welcome to the messaging app!</span> <span style="color: #ff001b">Enter your
+          question below</span></p>
     </div>
+    <div class="chat-box">
+      <div class="chat-view">
+        <div class="chat-image">
+          <img src="./images/bot-image.png" alt="chatbot" class="image-bot">
+        </div>
+        <div class="chat-text">Ask me anything you want ?</div>
+      </div>
+      <div class="message-container" id="message-container">
+      </div>
+    </div>
+
+    <div class="input">
+      <input class="input-field" id="question-input" type="text" placeholder="Enter Your Question"
+        onkeydown="handleKeyDown(event)"></input>
+      <button onclick="submitQuestion()" class="button-submit">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_50_4227)">
+            <path
+              d="M3 13.0001H9V11.0001H3V1.84611C3.00001 1.75922 3.02267 1.67384 3.06573 1.59838C3.1088 1.52291 3.17078 1.45997 3.24558 1.41576C3.32037 1.37155 3.4054 1.34759 3.49227 1.34625C3.57915 1.34491 3.66487 1.36623 3.741 1.40811L22.203 11.5621C22.2814 11.6053 22.3468 11.6687 22.3923 11.7457C22.4378 11.8228 22.4618 11.9106 22.4618 12.0001C22.4618 12.0896 22.4378 12.1774 22.3923 12.2545C22.3468 12.3315 22.2814 12.3949 22.203 12.4381L3.741 22.5921C3.66487 22.634 3.57915 22.6553 3.49227 22.654C3.4054 22.6526 3.32037 22.6287 3.24558 22.5844C3.17078 22.5402 3.1088 22.4773 3.06573 22.4018C3.02267 22.3264 3.00001 22.241 3 22.1541V13.0001Z"
+              fill="#a6a2a2" />
+          </g>
+          <defs>
+            <clipPath id="clip0_50_4227">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+
+      </button>
+    </div>
+
+    <div class="footer">
+      Powered by <a href="https://brainlox.ai/">brainlox.ai</a>
+    </div>
+
   </div>
-  <div class="input-container">
-    <input type="text" id="question-input" placeholder="Enter your question" onkeydown="handleKeyDown(event)">
-    <button onclick="submitQuestion()">Submit</button>
-  </div>
-</div>
 
-<script>
-  var questionInput = document.getElementById("question-input");
-  var submitButton = document.querySelector(".input-container button");
+  <!-- <div class="container">
+    <div class="message-container" id="message-container">
+      <div class="message">
+        <p>Welcome to the messaging app! Enter your question below:</p>
+      </div>
+    </div>
+    <div class="input-container">
+      <input type="text" id="question-input" placeholder="Enter your question" onkeydown="handleKeyDown(event)">
+      <button onclick="submitQuestion()">Submit</button>
+    </div>
+  </div> -->
 
-  function handleKeyDown(event) {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-      submitQuestion();
-    }
-  }
+  <script>
+    var questionInput = document.getElementById("question-input");
+    var submitButton = document.querySelector(".input-container button");
 
-  function submitQuestion() {
-    var question = questionInput.value;
-
-    if (question.trim() === "") {
-      return;
-    }
-
-    questionInput.value = "";
-    questionInput.disabled = true;
-    submitButton.disabled = true;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/process_pdf", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        displayMessage(question, "user-message");
-        displayMessage(response.answer, "answer-message");
-        displaySources(response.sources);
-
-        questionInput.disabled = false;
-        submitButton.disabled = false;
-        questionInput.focus();
+    function handleKeyDown(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        submitQuestion();
       }
-    };
+    }
 
-    var data = JSON.stringify({ "question": question });
-    xhr.send(data);
-  }
+    function submitQuestion() {
+      var question = questionInput.value;
 
-  function displayMessage(message, className) {
-    var messageContainer = document.getElementById("message-container");
-    var messageElement = document.createElement("div");
-    messageElement.classList.add("message", className);
-    messageElement.innerHTML = "<p>" + message + "</p>";
-    messageContainer.appendChild(messageElement);
-  }
+      if (question.trim() === "") {
+        return;
+      }
 
-  function displaySources(sources) {
-    var messageContainer = document.getElementById("message-container");
-    var sourceMessage = document.createElement("div");
-    sourceMessage.classList.add("message", "source-message");
-    var sourcesHTML = "<p>Sources:</p><a href='" + sources + "' target='_blank'>" + sources + "</a>";
-    sourceMessage.innerHTML = sourcesHTML;
-    messageContainer.appendChild(sourceMessage);
-  }
-</script>
+      questionInput.value = "";
+      questionInput.disabled = true;
+      submitButton.disabled = true; input[type = "text"]
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/process_pdf", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          displayMessage(question, "user-message");
+          displayMessage(response.answer, "answer-message");
+          displaySources(response.sources);
+
+          questionInput.disabled = false;
+          submitButton.disabled = false;
+          questionInput.focus();
+        }
+      };
+
+      var data = JSON.stringify({ "question": question });
+      xhr.send(data);
+    }
+
+    function displayMessage(message, className) {
+      var messageContainer = document.getElementById("message-container");
+      var messageElement = document.createElement("div");
+      messageElement.classList.add("message", className);
+      messageElement.innerHTML = "<p>" + message + "</p>";
+      messageContainer.appendChild(messageElement);
+    }
+
+    function displaySources(sources) {
+      var messageContainer = document.getElementById("message-container");
+      var sourceMessage = document.createElement("div");
+      sourceMessage.classList.add("message", "source-message");
+      var sourcesHTML = "<p>Sources:</p><a href='" + sources + "' target='_blank'>" + sources + "</a>";
+      sourceMessage.innerHTML = sourcesHTML;
+      messageContainer.appendChild(sourceMessage);
+    }
+  </script>
 </body>
 
 </html>
