@@ -115,109 +115,108 @@
 
 <body>
 
-<nav>
-  <div class="nav-text">Home</div>
-  <img src="../static/images/brainlox_logo_without_bg.png" alt="logo" style="width: 8rem;">
-</nav>
+  <nav>
+    <div class="nav-text">Home</div>
+    <img src="../static/images/brainlox_logo_without_bg.png" alt="logo" style="width: 8rem;">
+  </nav>
 
-<div class="container">
-  <div class="message-container" id="message-container">
-    <div class="message">
-      <div class="head"><span style="color: #310036">Welcome to the Brainlox app!</span> <span
-              style="color: #ff001b">Enter your
-            question below</span></div>
+  <div class="container">
+    <div class="message-container" id="message-container">
+      <div class="message">
+        <div class="head"><span style="color: #310036">Welcome to the Brainlox!</span> <span
+            style="color: #ff001b">Enter your question below</span></div>
+      </div>
+    </div>
+    <div class="input-container">
+      <input type="text" id="question-input" placeholder="Enter your question" onkeydown="handleKeyDown(event)">
+      <button onclick="submitQuestion()">Submit</button>
     </div>
   </div>
-  <div class="input-container">
-    <input type="text" id="question-input" placeholder="Enter your question" onkeydown="handleKeyDown(event)">
-    <button onclick="submitQuestion()">Submit</button>
+
+  <div class="footer">
+    Powered by <a href="https://brainlox.ai/">brainlox.ai</a>
   </div>
-</div>
 
-<div class="footer">
-  Powered by <a href="https://brainlox.ai/">brainlox.ai</a>
-</div>
+  <script>
+    var questionInput = document.getElementById("question-input");
+    var submitButton = document.querySelector(".input-container button");
 
-<script>
-  var questionInput = document.getElementById("question-input");
-  var submitButton = document.querySelector(".input-container button");
-
-  function handleKeyDown(event) {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-      submitQuestion();
-    }
-  }
-
-  function submitQuestion() {
-    var question = questionInput.value;
-
-    if (question.trim() === "") {
-      return;
-    }
-
-    questionInput.value = "";
-    questionInput.disabled = true;
-    submitButton.disabled = true;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/process_pdf", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
-        displayMessage(question, "user-message");
-        displayMessage(response.answer, "answer-message");
-        displaySources(response.sources);
-
-        questionInput.disabled = false;
-        submitButton.disabled = false;
-        questionInput.focus();
+    function handleKeyDown(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        submitQuestion();
       }
-    };
+    }
 
-    var data = JSON.stringify({ "question": question });
-    xhr.send(data);
-  }
+    function submitQuestion() {
+      var question = questionInput.value;
 
-  function displayMessage(message, className) {
-    var messageContainer = document.getElementById("message-container");
-    var messageElement = document.createElement("div");
-    messageElement.classList.add("message", className);
-    messageElement.innerHTML = "<p>" + message + "</p>";
-    messageContainer.appendChild(messageElement);
-  }
+      if (question.trim() === "") {
+        return;
+      }
 
-  function displaySources(sources) {
-    var messageContainer = document.getElementById("message-container");
-    var sourceMessage = document.createElement("div");
-    sourceMessage.classList.add("message", "source-message");
+      questionInput.value = "";
+      questionInput.disabled = true;
+      submitButton.disabled = true;
 
-    var sourcesArray = sources.split(","); // Split the sources string into an array
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/process_pdf", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
 
-    var sourcesParagraph = document.createElement("p");
-    sourcesParagraph.textContent = "Sources:";
-    sourceMessage.appendChild(sourcesParagraph);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          displayMessage(question, "user-message");
+          displayMessage(response.answer, "answer-message");
+          displaySources(response.sources);
 
-    var sourcesList = document.createElement("ul"); // Create an unordered list element
+          questionInput.disabled = false;
+          submitButton.disabled = false;
+          questionInput.focus();
+        }
+      };
 
-    sourcesArray.forEach(function (source) {
-      var listItem = document.createElement("li"); // Create a list item element
-      var link = document.createElement("a"); // Create an anchor element
+      var data = JSON.stringify({ "question": question });
+      xhr.send(data);
+    }
 
-      link.href = source;
-      link.target = "_blank";
-      link.textContent = source;
+    function displayMessage(message, className) {
+      var messageContainer = document.getElementById("message-container");
+      var messageElement = document.createElement("div");
+      messageElement.classList.add("message", className);
+      messageElement.innerHTML = "<p>" + message + "</p>";
+      messageContainer.appendChild(messageElement);
+    }
 
-      listItem.appendChild(link); // Append the anchor element to the list item
-      sourcesList.appendChild(listItem); // Append the list item to the sources list
-    });
+    function displaySources(sources) {
+      var messageContainer = document.getElementById("message-container");
+      var sourceMessage = document.createElement("div");
+      sourceMessage.classList.add("message", "source-message");
 
-    sourceMessage.appendChild(sourcesList); // Append the sources list to the source message
-    messageContainer.appendChild(sourceMessage);
-  }
-</script>
+      var sourcesArray = sources.split(","); // Split the sources string into an array
+
+      var sourcesParagraph = document.createElement("p");
+      sourcesParagraph.textContent = "Sources:";
+      sourceMessage.appendChild(sourcesParagraph);
+
+      var sourcesList = document.createElement("ul"); // Create an unordered list element
+
+      sourcesArray.forEach(function (source) {
+        var listItem = document.createElement("li"); // Create a list item element
+        var link = document.createElement("a"); // Create an anchor element
+
+        link.href = source;
+        link.target = "_blank";
+        link.textContent = source;
+
+        listItem.appendChild(link); // Append the anchor element to the list item
+        sourcesList.appendChild(listItem); // Append the list item to the sources list
+      });
+
+      sourceMessage.appendChild(sourcesList); // Append the sources list to the source message
+      messageContainer.appendChild(sourceMessage);
+    }
+  </script>
 </body>
 
 </html>
