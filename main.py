@@ -13,9 +13,10 @@ from langchain import OpenAI
 import pylibmagic
 from langchain.document_loaders import SeleniumURLLoader,PlaywrightURLLoader
 from langchain.document_loaders import PlaywrightURLLoader
-
+from langchain.document_loaders import DirectoryLoader
+from langchain.document_loaders import TextLoader
 import os
-os.environ["OPENAI_API_KEY"]
+os.environ["OPENAI_API_KEY"]="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"
 
 
 def extract_urls(url):
@@ -44,9 +45,10 @@ urls = extract_urls(website_url)
 for url in urls:
     print(url)
 #
-loaders = SeleniumURLLoader(urls=urls)
-data = loaders.load()
-
+# loaders = SeleniumURLLoader(urls=urls)
+loader = DirectoryLoader('data', glob="**/*.txt",loader_cls=TextLoader) 
+data = loader.load()
+print(data)
 
 text_splitter = CharacterTextSplitter(separator='\n',
                                       chunk_size=2000,
@@ -58,7 +60,7 @@ docs = text_splitter.split_documents(data)
 embeddings = OpenAIEmbeddings()
 vectorStore_openAI = FAISS.from_documents(docs, embeddings)
 
-with open("brainlox_embeddings.pkl", "wb") as f:
+with open("vectorstore.pkl", "wb") as f:
     pickle.dump(vectorStore_openAI, f)
 
 # with open("brainlox_embeddings.pkl", "rb") as f:
