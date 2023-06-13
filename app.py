@@ -11,7 +11,7 @@ from langchain.llms import OpenAI
 app = Flask(__name__)
 CORS(app)
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "Enter your own api key"
 
 
 
