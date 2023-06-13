@@ -1,21 +1,19 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
-from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.callbacks import get_openai_callback
 from flask_cors import CORS
 from waitress import serve
 from langchain.chat_models import ChatOpenAI
 import os
-import pickle
-from langchain.document_loaders import StripeLoader
-from langchain.indexes import VectorstoreIndexCreator
-print("hello")
+from langchain.agents import create_csv_agent
+from langchain.llms import OpenAI
+
+
 app = Flask(__name__)
 CORS(app)
 
 os.environ["OPENAI_API_KEY"] = "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"
 
-#it is trial access token
-os.environ["STRIPE_ACCESS_TOKEN"] = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"  # here strip"
+
 
 
 @app.route('/')
@@ -28,33 +26,34 @@ def process_pdf():
     # Get the file link and question from the request
     data = request.get_json()
     question = data['question']
-    #embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-    stripe_loader = StripeLoader("charges")
-    # index = VectorstoreIndexCreator().from_loaders([stripe_loader])
+    csvPath="F:\Triluxo Github\CSV_Agent_bot\data\Retail_Store.csv"
     with get_openai_callback() as cb:
-        with open("vectorstore.pkl", "rb") as f:
-            VectorStore = pickle.load(f)
-
-        #RESULT WITH SOURCES
-        llm = ChatOpenAI(temperature=0,model_name='gpt-3.5-turbo')
-        chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=VectorStore.as_retriever())
-        #using stripe 
-        #chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=index.vectorstore.as_retriever()) 
-
-        answer = chain({"question": question}, return_only_outputs=True)
-
-        # llm = ChatOpenAI(temperature=0,model_name='gpt-3.5-turbo')
-        # chain = load_qa_chain(llm, chain_type="stuff")
-        #
-        # # Perform the question answering
-        # docs = VectorStore.similarity_search(question)
-        # answer = chain.run(input_documents=docs, question=question)
-
-        print(answer)
-        print(cb)
-    # Return the answer as a JSON response
-    #return jsonify ({'answer': answer})
-    return answer
+    
+        llm = ChatOpenAI(temperature=0.0,model_name='gpt-3.5-turbo',request_timeout=120)
+        
+        try:
+            agent = create_csv_agent(OpenAI(temperature=0), csvPath)
+            # Perform the question answering
+            docs = agent.run(question)
+            
+            response = {
+                'question': question,
+                'answer': docs
+            }
+            
+            return jsonify(response)
+        
+        except Exception as e:
+            error_response = {
+                'error': str(e)
+            }
+            response = {
+                'question': question,
+                'answer': error_response
+            }
+            
+            return jsonify(error_response)  # Return HTTP 500 status code for error
+        
 
 @app.route('/.well-known/ai-plugin.json')
 def serve_ai_plugin():
