@@ -26,7 +26,8 @@ def process_pdf():
     # Get the file link and question from the request
     data = request.get_json()
     question = data['question']
-    csvPath="F:\Triluxo Github\CSV_Agent_bot\data\Retail_Store.csv"
+   
+    csvPath="data/Retail_Store.csv"
     with get_openai_callback() as cb:
     
         llm = ChatOpenAI(temperature=0.0,model_name='gpt-3.5-turbo',request_timeout=120)
