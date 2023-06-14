@@ -15,7 +15,13 @@ from typing import Dict, List, Optional, Any
 app = Flask(__name__)
 CORS(app)
 
+<<<<<<< HEAD
 os.environ["OPENAI_API_KEY"] = "enter your own api key"
+=======
+os.environ["OPENAI_API_KEY"] = "Enter your own api key"
+
+
+>>>>>>> da93436404532a7f1f1d61ac886b0f9567ea5524
 
 embeddings_model = OpenAIEmbeddings()
 embedding_size = 1536
