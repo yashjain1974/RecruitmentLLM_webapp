@@ -16,7 +16,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "enter api key"
 
 
 
