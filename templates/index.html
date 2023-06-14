@@ -110,6 +110,45 @@
       padding: 2rem 1rem;
       gap: 1rem;
     }
+    .task-list {
+      margin-bottom: 20px;
+    }
+    
+    .task-result {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .task-ending {
+      color: #ff0000;
+      font-weight: bold;
+    }
+    @keyframes spinner {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      margin: 50px auto;
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top-color: #3498db;
+      border-radius: 50%;
+      animation: spinner 1s infinite linear;
+    }
+    .custom-pre {
+    background-color: #f5f5f5; /* Set the background color */
+    padding: 10px; /* Add some padding for spacing */
+    font-family: monospace; /* Choose a monospace font for fixed-width text */
+    font-size:medium;
+    color: #333; /* Set the text color */
+    border: 1px solid #ccc; /* Add a border for visual separation */
+    white-space: pre-wrap; /* Preserve line breaks and wrap long lines */
+}
   </style>
 </head>
 
@@ -123,11 +162,13 @@
   <div class="container">
     <div class="message-container" id="message-container">
       <div class="message">
-        <div class="head"><span style="color: #310036">Welcome to Active Ride Inventory Bot</span> 
+        <div class="head"><span style="color: #310036">Welcome to BabyAGI Bot</span> 
           <!-- <p style="color: #2f5814">Below Bot is trained on retail csv dataset which contains sales data</p> -->
           <span style="color: #ff001b">Enter your question below</span></div>
       </div>
+    
     </div>
+    <div class="spinner" id="spinner"></div>
     <div class="input-container">
       <input type="text" id="question-input" placeholder="Enter your question" onkeydown="handleKeyDown(event)">
       <button onclick="submitQuestion()">Submit</button>
@@ -141,7 +182,17 @@
   <script>
    var questionInput = document.getElementById("question-input");
 var submitButton = document.querySelector(".input-container button");
+function showSpinner() {
+      var spinner = document.getElementById("spinner");
+      spinner.style.display = "block"; // Show the spinner
+    }
 
+    function hideSpinner() {
+      var spinner = document.getElementById("spinner");
+      spinner.style.display = "none"; // Hide the spinner
+    }
+
+    hideSpinner();
 function handleKeyDown(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
@@ -151,11 +202,12 @@ function handleKeyDown(event) {
 
 function submitQuestion() {
   var question = questionInput.value;
-
+showSpinner();
   if (question.trim() === "") {
     return;
   }
-  displayMessage(question, "user-message");
+
+  displayQuestion(question, "user-message");
 
   questionInput.value = "";
   // questionInput.disabled = true;
@@ -170,8 +222,14 @@ function submitQuestion() {
       if (xhr.status === 200) {
         var response = JSON.parse(xhr.responseText);
         
-        displayMessage(response.answer, "answer-message");
+        // displayMessage(response.task_list, "task_list");
+        // displayMessage(response.next_task, "next_task");
+        // displayMessage(response.task_result, "task_result");
+        // displayMessage(response.task_ending, "task_ending");
+        displayMessage(response.final_result, "final_result");
+        hideSpinner();
         displaySources(response.sources);
+       
       }
 
       questionInput.disabled = false;
@@ -189,11 +247,23 @@ function submitQuestion() {
 // Add the event listener for the keydown event
 questionInput.addEventListener("keydown", handleKeyDown);
 
+function displayQuestion(message, className) {
+      var messageContainer = document.getElementById("message-container");
+      var messageElement = document.createElement("div");
+      messageElement.classList.add("message", className);
+     
+      // htm='<div class="task-list"> <h2>Task List</h2><pre>{{ task_list }}</pre><p>Next Task: {{ next_task }}</p> </div><div class="task-result"><h2>Task Result</h2><pre>{{ task_result }}</pre></div><div class="task-ending"><h2>Task Ending</h2><pre>{{ task_ending }}</pre> </div>'
+      messageElement.innerHTML = "<p>" + message + "</p>";
+      messageContainer.appendChild(messageElement);
+    }
+
     function displayMessage(message, className) {
       var messageContainer = document.getElementById("message-container");
       var messageElement = document.createElement("div");
       messageElement.classList.add("message", className);
-      messageElement.innerHTML = "<p>" + message + "</p>";
+     
+      // htm='<div class="task-list"> <h2>Task List</h2><pre>{{ task_list }}</pre><p>Next Task: {{ next_task }}</p> </div><div class="task-result"><h2>Task Result</h2><pre>{{ task_result }}</pre></div><div class="task-ending"><h2>Task Ending</h2><pre>{{ task_ending }}</pre> </div>'
+      messageElement.innerHTML = "<pre class='custom-pre'>" + message + "</pre>";
       messageContainer.appendChild(messageElement);
     }
 
@@ -225,6 +295,7 @@ questionInput.addEventListener("keydown", handleKeyDown);
       sourceMessage.appendChild(sourcesList); // Append the sources list to the source message
       messageContainer.appendChild(sourceMessage);
     }
+    
   </script>
 </body>
 
