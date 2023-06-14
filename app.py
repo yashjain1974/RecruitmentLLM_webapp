@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from langchain.callbacks import get_openai_callback
 from flask_cors import CORS
-from waitress import serve
+
 from langchain.chat_models import ChatOpenAI
 import os
 from langchain.agents import create_csv_agent
@@ -15,13 +15,12 @@ from typing import Dict, List, Optional, Any
 app = Flask(__name__)
 CORS(app)
 
-<<<<<<< HEAD
-os.environ["OPENAI_API_KEY"] = "enter your own api key"
-=======
-os.environ["OPENAI_API_KEY"] = "Enter your own api key"
+
+os.environ["OPENAI_API_KEY"] = "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"
 
 
->>>>>>> da93436404532a7f1f1d61ac886b0f9567ea5524
+
+
 
 embeddings_model = OpenAIEmbeddings()
 embedding_size = 1536
