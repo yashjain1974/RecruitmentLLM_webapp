@@ -16,11 +16,13 @@ from langchain import OpenAI, LLMChain
 from langchain.tools import DuckDuckGoSearchRun
 import firebase_admin
 from firebase_admin import db, credentials
-
+from dotenv.main import load_dotenv
 import os
-os.environ['OPENAI_API_KEY'] = 'Enter your own api key'
-cred = credentials.Certificate("credentials.json")
-firebase_admin.initialize_app(cred, {"databaseURL": "https://babyagi-bot-default-rtdb.firebaseio.com"})
+load_dotenv()
+function_dir = os.path.dirname(os.path.realpath(__file__))
+csv_path = os.path.join(function_dir, 'credentials.json')
+cred = credentials.Certificate(csv_path)
+firebase_admin.initialize_app(cred, {"databaseURL": "https://baby-agi-bot-default-rtdb.firebaseio.com"})
 class TaskCreationChain(LLMChain):
     """Chain to generates tasks."""
 
@@ -68,7 +70,7 @@ class TaskPrioritizationChain(LLMChain):
         )
         return cls(prompt=prompt, llm=llm, verbose=verbose)
 
-csv_path="data/Retail_Store.csv"
+csv_path = os.path.join(function_dir, 'Retail_Store.csv')
 todo_prompt = PromptTemplate.from_template(
     "You are a planner who is an expert at coming up with a todo list for a given objective. Come up with a todo list for this objective: {objective}"
 )

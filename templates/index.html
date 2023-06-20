@@ -241,13 +241,13 @@
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyCX5Vw0KDzHVW00HzhwvUsugKIcpc4SIoE",
-            authDomain: "babyagi-bot.firebaseapp.com",
-            databaseURL: "https://babyagi-bot-default-rtdb.firebaseio.com",
-            projectId: "babyagi-bot",
-            storageBucket: "babyagi-bot.appspot.com",
-            messagingSenderId: "877699484446",
-            appId: "1:877699484446:web:db85f2fb2395b27a00d70f"
+            apiKey: "AIzaSyAMbhadWpC_epoFEMa_H-rKcHePTCWkxVQ",
+            authDomain: "baby-agi-bot.firebaseapp.com",
+            databaseURL: "https://baby-agi-bot-default-rtdb.firebaseio.com",
+            projectId: "baby-agi-bot",
+            storageBucket: "baby-agi-bot.appspot.com",
+            messagingSenderId: "1096990483543",
+            appId: "1:1096990483543:web:3adb42d14742ebc484af12"
         };
         firebase.initializeApp(firebaseConfig);
         function resetDatabase() {
@@ -270,7 +270,7 @@
         // Initialize Firebase
 
 
-        
+
 
         var questionInput = document.getElementById("question-input");
         var submitButton = document.querySelector(".input-container button");
@@ -293,13 +293,13 @@
         }
 
         function convertToAsciiString(str) {
-  var asciiString = '';
-  for (var i = 0; i < str.length; i++) {
-    var charCode = str.charCodeAt(i);
-    asciiString += charCode.toString() + '_';
-  }
-  return asciiString.trim();
-}
+            var asciiString = '';
+            for (var i = 0; i < str.length; i++) {
+                var charCode = str.charCodeAt(i);
+                asciiString += charCode.toString() + '_';
+            }
+            return asciiString.trim();
+        }
         function submitQuestion() {
             var question = questionInput.value;
             showSpinner();
@@ -309,7 +309,7 @@
             if (question.trim() === "") {
                 return;
             }
-            asciiQuestion=convertToAsciiString(question)
+            asciiQuestion = convertToAsciiString(question)
 
 
             displayQuestion(question, "user-message");
@@ -321,7 +321,7 @@
             // submitButton.disabled = true;
 
 
-            
+
             var database = firebase.database();
 
 
@@ -375,28 +375,28 @@
             });
 
             function setBooleanValue() {
-            // Get a reference to the database
-            var database = firebase.database();
+                // Get a reference to the database
+                var database = firebase.database();
 
-            // Get a reference to the desired database path
-            var dataRef = database.ref(`${asciiQuestion}/isStopped/`);
+                // Get a reference to the desired database path
+                var dataRef = database.ref(`${asciiQuestion}/isStopped/`);
 
-            // Boolean value to be set
-            var value = true;
+                // Boolean value to be set
+                var value = true;
 
-            // Set the boolean value in the database
-            dataRef.set(value)
-                .then(function () {
-                    console.log("Boolean value set successfully.");
-                })
-                .catch(function (error) {
-                    console.log("Error setting boolean value: " + error);
-                });
-        }
+                // Set the boolean value in the database
+                dataRef.set(value)
+                    .then(function () {
+                        console.log("Boolean value set successfully.");
+                    })
+                    .catch(function (error) {
+                        console.log("Error setting boolean value: " + error);
+                    });
+            }
 
 
-        var button = document.getElementById("stopButton");
-        button.addEventListener("click", setBooleanValue);
+            var button = document.getElementById("stopButton");
+            button.addEventListener("click", setBooleanValue);
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/process_pdf", true);

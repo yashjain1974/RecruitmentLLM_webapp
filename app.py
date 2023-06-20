@@ -8,14 +8,10 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.docstore import InMemoryDocstore
 from typing import Dict, List, Optional, Any
+from dotenv.main import load_dotenv
 app = Flask(__name__)
 CORS(app)
-
-
-os.environ["OPENAI_API_KEY"] = "enter your own api key"
-
-
-
+load_dotenv()
 
 
 embeddings_model = OpenAIEmbeddings()
