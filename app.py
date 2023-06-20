@@ -1,10 +1,6 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
-from langchain.callbacks import get_openai_callback
 from flask_cors import CORS
-
-from langchain.chat_models import ChatOpenAI
 import os
-from langchain.agents import create_csv_agent
 from langchain.llms import OpenAI
 from bot_app import BabyAGI
 import faiss
@@ -16,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 
-os.environ["OPENAI_API_KEY"] = "enter api key"
+os.environ["OPENAI_API_KEY"] = "enter your own api key"
 
 
 
@@ -34,6 +30,8 @@ def index():
 
 @app.route('/process_pdf', methods=['POST'])
 def process_pdf():
+
+    
     embeddings_model = OpenAIEmbeddings()
     # Initialize the vectorstore as empty
     embedding_size = 1536
@@ -46,32 +44,43 @@ def process_pdf():
     # Logging of LLMChains
     verbose = False
     # Get the file link and question from the request
+
     data = request.get_json()
     question = data['question']
     
    
     # If None, will keep on going forever
     max_iterations: Optional[int] = 3
+    try:
+        baby_agi = BabyAGI.from_llm(
+            llm=llm, vectorstore=vectorstore, verbose=verbose, max_iterations=max_iterations
+        )
+        # baby_agi({"objective": question})
     
-    baby_agi = BabyAGI.from_llm(
-        llm=llm, vectorstore=vectorstore, verbose=verbose, max_iterations=max_iterations
-    )
-    # baby_agi({"objective": question})
-   
-    output = baby_agi._call(data)
-    print(output)
-    print(output["final_result"])
-    response = {
-                'question': question,
-                
-            'task_list': output['task_list'],       # Replace with the actual task list
-            'next_task': output['next_task'],       # Replace with the actual next task
-            'task_result': output['task_result'],     # Replace with the actual task result
-            'task_ending': output['task_ending']  ,  # Replace with the actual task ending
-            'final_result': output['final_result']    # Replace with the actual task ending
-    
+        output = baby_agi._call(data)
+        print(output)
+        print(output["final_result"])
+        response = {
+                    'question': question,
+                    
+                'task_list': output['task_list'],       # Replace with the actual task list
+                'next_task': output['next_task'],       # Replace with the actual next task
+                'task_result': output['task_result'],     # Replace with the actual task result
+                'task_ending': output['task_ending']  ,  # Replace with the actual task ending
+                'final_result': output['final_result']    # Replace with the actual task ending
+        
+                }
+        return jsonify(response)
+    except Exception as e:
+        error_response = {
+                'error': str(e)
             }
-    return jsonify(response)
+        response = {
+                'question': question,
+                'final_result': error_response
+            }
+        return jsonify(error_response)  # Return HTTP 500 status code for error
+
         
 
 @app.route('/.well-known/ai-plugin.json')

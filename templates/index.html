@@ -2,301 +2,496 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brainlox App</title>
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400&family=Roboto&display=swap");
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainlox App</title>
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400&family=Roboto&display=swap");
 
-    body {
-      background-color: white;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      margin: auto;
-      max-width: 1280px;
-      font-family: "Nunito Sans", sans-serif;
-      letter-spacing: 0.025em;
-    }
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            margin: auto;
+            max-width: 1280px;
+            font-family: "Nunito Sans", sans-serif;
+            letter-spacing: 0.025em;
+        }
 
-    nav {
-      padding: 1rem;
-      border-bottom: 1px solid;
-      border-color: #e1e7f0;
-      display: flex;
-      justify-content: space-between;
-      gap: 50vw;
-    }
+        nav {
+            padding: 1rem;
+            border-bottom: 1px solid;
+            border-color: #e1e7f0;
+            display: flex;
+            justify-content: space-between;
+            gap: 50vw;
+        }
 
-    nav .nav-text {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
+        nav .nav-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
 
-    .container {
-      margin: 1rem;
-      padding: 1rem;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0px 8px 8px #00000029;
-      height: 70vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow-y: scroll;
-    }
+        .container {
+            margin: 1rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0px 8px 8px #00000029;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: scroll;
+        }
 
-    .message-container {
-      display: flex;
-      flex-direction: column;
-    }
+        .message-container {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .message {
-      background-color: white;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 4px;
-    }
+        .message {
+            background-color: white;
+            padding: 10px;
+            margin-bottom: 2px;
+            border-radius: 4px;
+        }
 
-    .head {
-      font-size: 1.5rem;
-      font-weight: 600;
-      text-align: center;
-    }
+        .head {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+        }
 
-    .message p {
-      margin: 0;
-    }
+        .message p {
+            margin: 0;
+        }
 
-    .user-message {
-      background-color: #b5cfff;
-      align-self: flex-end;
-    }
 
-    .answer-message {
-      background-color: #f5f5f5;
-    }
 
-    .source-message {
-      background-color: #ddfcc3;
-    }
+        .user-message {
+            background-color: #b5cfff;
+            align-self: flex-end;
+        }
 
-    .input-container {
-      display: flex;
-      margin-top: 20px;
-    }
+        .answer-message {
+            background-color: #f5f5f5;
+        }
 
-    .input-container input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-    }
+        .source-message {
+            background-color: #ddfcc3;
+        }
 
-    .input-container button {
-      padding: 10px 20px;
-      background-color: #4caf50;
-      border: none;
-      color: #ffffff;
-      font-weight: bold;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+        .input-container {
+            display: flex;
+            margin-top: 20px;
+        }
 
-    .footer {
-      text-align: center;
-      font-size: 1.25rem;
-      font-weight: 600;
-      padding: 2rem 1rem;
-      gap: 1rem;
-    }
-    .task-list {
-      margin-bottom: 20px;
-    }
-    
-    .task-result {
-      margin-bottom: 20px;
-      padding: 10px;
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-    
-    .task-ending {
-      color: #ff0000;
-      font-weight: bold;
-    }
-    @keyframes spinner {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+        .input-container input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+        }
 
-    .spinner {
-      margin: 50px auto;
-      width: 50px;
-      height: 50px;
-      border: 5px solid #f3f3f3;
-      border-top-color: #3498db;
-      border-radius: 50%;
-      animation: spinner 1s infinite linear;
-    }
-    .custom-pre {
-    background-color: #f5f5f5; /* Set the background color */
-    padding: 10px; /* Add some padding for spacing */
-    font-family: monospace; /* Choose a monospace font for fixed-width text */
-    font-size:medium;
-    color: #333; /* Set the text color */
-    border: 1px solid #ccc; /* Add a border for visual separation */
-    white-space: pre-wrap; /* Preserve line breaks and wrap long lines */
-}
-  </style>
+        .input-container button {
+            padding: 10px 10px;
+            background-color: #4caf50;
+            border: none;
+            color: #ffffff;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #stopButton {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #de331c;
+            border: none;
+            color: #ffffff;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .stop_iter {
+            color: red;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding: 2rem 1rem;
+            gap: 1rem;
+        }
+
+        .task-list {
+            margin-bottom: 20px;
+        }
+
+        .task-result {
+            margin-bottom: 210px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .task-ending {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spinner {
+            margin: 50px auto;
+            min-width: 50px;
+            min-height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top-color: #3498db;
+            border-radius: 50%;
+            animation: spinner 1s infinite linear;
+        }
+
+        .custom-pre {
+            background-color: #f5f5f5;
+            /* Set the background color */
+            padding: 10px;
+            /* Add some padding for spacing */
+            font-family: monospace;
+            /* Choose a monospace font for fixed-width text */
+            font-size: medium;
+            color: #333;
+            /* Set the text color */
+            border: 1px solid #ccc;
+            /* Add a border for visual separation */
+            white-space: pre-wrap;
+            /* Preserve line breaks and wrap long lines */
+        }
+    </style>
 </head>
 
 <body>
 
-  <nav>
-    <div class="nav-text">Home</div>
-    <img src="../static/images/brainlox_logo_without_bg.png" alt="logo" style="width: 8rem;">
-  </nav>
+    <nav>
+        <div class="nav-text">Home</div>
+        <img src="../static/images/brainlox_logo_without_bg.png" alt="logo" style="width: 8rem;">
+    </nav>
 
-  <div class="container">
-    <div class="message-container" id="message-container">
-      <div class="message">
-        <div class="head"><span style="color: #310036">Welcome to BabyAGI Bot</span> 
-          <!-- <p style="color: #2f5814">Below Bot is trained on retail csv dataset which contains sales data</p> -->
-          <span style="color: #ff001b">Enter your question below</span></div>
-      </div>
-    
+    <div class="container">
+        <div class="message-container" id="message-container">
+            <div class="message">
+                <div class="head"><span style="color: #310036">Welcome to BabyAGI Bot</span>
+                    <!-- <p style="color: #2f5814">Below Bot is trained on retail csv dataset which contains sales data</p> -->
+                    <span style="color: #ff001b">Enter your question below</span>
+                </div>
+            </div>
+            <div id="data"></div>
+
+        </div>
+
+        <div class="spinner" id="spinner"></div>
+        <div class="stop-container" id="stop-container">
+            <div class="stop_iter">
+
+            </div>
+        </div>
+        <div class="input-container">
+
+
+            <input type="text" id="question-input" placeholder="Enter your question" onkeydown="handleKeyDown(event)">
+            <button onclick="submitQuestion()">Submit</button>
+            <button id="stopButton">Stop Loop</button>
+        </div>
     </div>
-    <div class="spinner" id="spinner"></div>
-    <div class="input-container">
-      <input type="text" id="question-input" placeholder="Enter your question" onkeydown="handleKeyDown(event)">
-      <button onclick="submitQuestion()">Submit</button>
+
+
+
+
+
+
+
     </div>
-  </div>
 
-  <div class="footer">
-    Powered by <a href="https://brainlox.ai/">brainlox.ai</a>
-  </div>
+    <div class="footer">
+        Powered by <a href="https://brainlox.ai/">brainlox.ai</a>
+    </div>
 
-  <script>
-   var questionInput = document.getElementById("question-input");
-var submitButton = document.querySelector(".input-container button");
-function showSpinner() {
-      var spinner = document.getElementById("spinner");
-      spinner.style.display = "block"; // Show the spinner
-    }
+    <script>
 
-    function hideSpinner() {
-      var spinner = document.getElementById("spinner");
-      spinner.style.display = "none"; // Hide the spinner
-    }
 
-    hideSpinner();
-function handleKeyDown(event) {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    submitQuestion();
-  }
-}
+        // Import the functions you need from the SDKs you need
 
-function submitQuestion() {
-  var question = questionInput.value;
-showSpinner();
-  if (question.trim() === "") {
-    return;
-  }
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
 
-  displayQuestion(question, "user-message");
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCX5Vw0KDzHVW00HzhwvUsugKIcpc4SIoE",
+            authDomain: "babyagi-bot.firebaseapp.com",
+            databaseURL: "https://babyagi-bot-default-rtdb.firebaseio.com",
+            projectId: "babyagi-bot",
+            storageBucket: "babyagi-bot.appspot.com",
+            messagingSenderId: "877699484446",
+            appId: "1:877699484446:web:db85f2fb2395b27a00d70f"
+        };
+        firebase.initializeApp(firebaseConfig);
+        function resetDatabase() {
+            // Get a reference to the root of the database
+            var database = firebase.database();
+            var ref = database.ref();
 
-  questionInput.value = "";
-  // questionInput.disabled = true;
-  // submitButton.disabled = true;
+            // Remove all data from the database
+            ref.remove()
+                .then(function () {
+                    console.log("Database reset successful.");
+                })
+                .catch(function (error) {
+                    console.log("Error resetting the database: " + error);
+                });
+        }
 
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/process_pdf", true);
-  xhr.setRequestHeader("Content-Type", "application/json");
+        // Call the resetDatabase function when the HTML page loads
+        window.addEventListener("load", resetDatabase);
+        // Initialize Firebase
 
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        var response = JSON.parse(xhr.responseText);
+
         
-        // displayMessage(response.task_list, "task_list");
-        // displayMessage(response.next_task, "next_task");
-        // displayMessage(response.task_result, "task_result");
-        // displayMessage(response.task_ending, "task_ending");
-        displayMessage(response.final_result, "final_result");
+
+        var questionInput = document.getElementById("question-input");
+        var submitButton = document.querySelector(".input-container button");
+        function showSpinner() {
+            var spinner = document.getElementById("spinner");
+            spinner.style.display = "block"; // Show the spinner
+        }
+
+        function hideSpinner() {
+            var spinner = document.getElementById("spinner");
+            spinner.style.display = "none"; // Hide the spinner
+        }
+
         hideSpinner();
-        displaySources(response.sources);
-       
-      }
+        function handleKeyDown(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                submitQuestion();
+            }
+        }
 
-      questionInput.disabled = false;
-      submitButton.disabled = false;
-      questionInput.focus();
-      questionInput.addEventListener("keydown", handleKeyDown); // Add the event listener again
-    }
-  };
-
-  questionInput.removeEventListener("keydown", handleKeyDown); // Remove the event listener temporarily
-  var data = JSON.stringify({ "question": question });
-  xhr.send(data);
+        function convertToAsciiString(str) {
+  var asciiString = '';
+  for (var i = 0; i < str.length; i++) {
+    var charCode = str.charCodeAt(i);
+    asciiString += charCode.toString() + '_';
+  }
+  return asciiString.trim();
 }
+        function submitQuestion() {
+            var question = questionInput.value;
+            showSpinner();
 
-// Add the event listener for the keydown event
-questionInput.addEventListener("keydown", handleKeyDown);
 
-function displayQuestion(message, className) {
-      var messageContainer = document.getElementById("message-container");
-      var messageElement = document.createElement("div");
-      messageElement.classList.add("message", className);
-     
-      // htm='<div class="task-list"> <h2>Task List</h2><pre>{{ task_list }}</pre><p>Next Task: {{ next_task }}</p> </div><div class="task-result"><h2>Task Result</h2><pre>{{ task_result }}</pre></div><div class="task-ending"><h2>Task Ending</h2><pre>{{ task_ending }}</pre> </div>'
-      messageElement.innerHTML = "<p>" + message + "</p>";
-      messageContainer.appendChild(messageElement);
-    }
 
-    function displayMessage(message, className) {
-      var messageContainer = document.getElementById("message-container");
-      var messageElement = document.createElement("div");
-      messageElement.classList.add("message", className);
-     
-      // htm='<div class="task-list"> <h2>Task List</h2><pre>{{ task_list }}</pre><p>Next Task: {{ next_task }}</p> </div><div class="task-result"><h2>Task Result</h2><pre>{{ task_result }}</pre></div><div class="task-ending"><h2>Task Ending</h2><pre>{{ task_ending }}</pre> </div>'
-      messageElement.innerHTML = "<pre class='custom-pre'>" + message + "</pre>";
-      messageContainer.appendChild(messageElement);
-    }
+            if (question.trim() === "") {
+                return;
+            }
+            asciiQuestion=convertToAsciiString(question)
 
-    function displaySources(sources) {
-      var messageContainer = document.getElementById("message-container");
-      var sourceMessage = document.createElement("div");
-      sourceMessage.classList.add("message", "source-message");
 
-      var sourcesArray = sources.split(","); // Split the sources string into an array
+            displayQuestion(question, "user-message");
 
-      var sourcesParagraph = document.createElement("p");
-      sourcesParagraph.textContent = "Sources:";
-      sourceMessage.appendChild(sourcesParagraph);
 
-      var sourcesList = document.createElement("ul"); // Create an unordered list element
 
-      sourcesArray.forEach(function (source) {
-        var listItem = document.createElement("li"); // Create a list item element
-        var link = document.createElement("a"); // Create an anchor element
+            questionInput.value = "";
+            // questionInput.disabled = true;
+            // submitButton.disabled = true;
 
-        link.href = source;
-        link.target = "_blank";
-        link.textContent = source;
 
-        listItem.appendChild(link); // Append the anchor element to the list item
-        sourcesList.appendChild(listItem); // Append the list item to the sources list
-      });
+            
+            var database = firebase.database();
 
-      sourceMessage.appendChild(sourcesList); // Append the sources list to the source message
-      messageContainer.appendChild(sourceMessage);
-    }
-    
-  </script>
+
+
+            var dataRef = database.ref("/");
+
+
+
+            // Variable to store the previous child count
+            // Variable to store the previous snapshot
+            var previousSnapshot = null;
+
+            function updateContent(snapshot) {
+                console.log(asciiQuestion)
+                var currentSnapshot = snapshot.val()[asciiQuestion];
+
+                if (previousSnapshot !== null) {
+                    // Get the keys of newly added items
+                    var newKeys = Object.keys(currentSnapshot).filter(key => !previousSnapshot.hasOwnProperty(key));
+
+                    // Update the HTML content for the new items
+                    newKeys.forEach(function (key) {
+                        var item = currentSnapshot[key];
+                        if (item == true) {
+                            displayStop("Stopping the chain until this iteration is done", `${key}_task_list`);
+                        }
+                        else {
+
+                            displayMessage(item, `${key}_task_list`);
+                        }
+                    });
+                } else {
+                    // Display all items in the initial snapshot
+                    for (var key in currentSnapshot) {
+                        if (currentSnapshot.hasOwnProperty(key)) {
+                            var item = currentSnapshot[key];
+
+
+                            displayMessage(item, `${key}_task_list`);
+                        }
+                    }
+                }
+
+                // Updatezthe previous snapshot
+                previousSnapshot = currentSnapshot;
+            }
+
+            // Listen for changes in the database
+            dataRef.on("value", updateContent, function (error) {
+                console.log("Error: " + error.code);
+            });
+
+            function setBooleanValue() {
+            // Get a reference to the database
+            var database = firebase.database();
+
+            // Get a reference to the desired database path
+            var dataRef = database.ref(`${asciiQuestion}/isStopped/`);
+
+            // Boolean value to be set
+            var value = true;
+
+            // Set the boolean value in the database
+            dataRef.set(value)
+                .then(function () {
+                    console.log("Boolean value set successfully.");
+                })
+                .catch(function (error) {
+                    console.log("Error setting boolean value: " + error);
+                });
+        }
+
+
+        var button = document.getElementById("stopButton");
+        button.addEventListener("click", setBooleanValue);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/process_pdf", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+
+                        // displayMessage(response.task_list, "task_list");
+                        // displayMessage(response.next_task, "next_task");
+                        // displayMessage(response.task_result, "task_result");
+                        // displayMessage(response.task_ending, "task_ending");
+                        // displayMessage(response.final_result, "final_result");
+                        displayMessage(response.task_ending, "final_result");
+                        hideSpinner();
+                        // displaySources(response.sources);
+
+                    }
+
+                    questionInput.disabled = false;
+                    submitButton.disabled = false;
+                    questionInput.focus();
+                    questionInput.addEventListener("keydown", handleKeyDown); // Add the event listener again
+                }
+            };
+
+            questionInput.removeEventListener("keydown", handleKeyDown); // Remove the event listener temporarily
+            var data = JSON.stringify({ "question": question });
+            xhr.send(data);
+        }
+
+        // Add the event listener for the keydown event
+        questionInput.addEventListener("keydown", handleKeyDown);
+
+        function displayQuestion(message, className) {
+            var messageContainer = document.getElementById("message-container");
+            var messageElement = document.createElement("div");
+            messageElement.classList.add("message", className);
+
+            // htm='<div class="task-list"> <h2>Task List</h2><pre>{{ task_list }}</pre><p>Next Task: {{ next_task }}</p> </div><div class="task-result"><h2>Task Result</h2><pre>{{ task_result }}</pre></div><div class="task-ending"><h2>Task Ending</h2><pre>{{ task_ending }}</pre> </div>'
+            messageElement.innerHTML = "<p>" + message + "</p>";
+            messageContainer.appendChild(messageElement);
+        }
+
+        function displayMessage(message, className) {
+            var messageContainer = document.getElementById("message-container");
+            var messageElement = document.createElement("div");
+            messageElement.classList.add("message", className);
+
+            // htm='<div class="task-list"> <h2>Task List</h2><pre>{{ task_list }}</pre><p>Next Task: {{ next_task }}</p> </div><div class="task-result"><h2>Task Result</h2><pre>{{ task_result }}</pre></div><div class="task-ending"><h2>Task Ending</h2><pre>{{ task_ending }}</pre> </div>'
+            messageElement.innerHTML = "<pre class='custom-pre'>" + message + "</pre>";
+            messageContainer.appendChild(messageElement);
+        }
+        function displayStop(message, className) {
+            var messageContainer = document.getElementById("stop-container");
+            var messageElement = document.createElement("div");
+            messageElement.classList.add("stop_iter", className);
+
+            // htm='<div class="task-list"> <h2>Task List</h2><pre>{{ task_list }}</pre><p>Next Task: {{ next_task }}</p> </div><div class="task-result"><h2>Task Result</h2><pre>{{ task_result }}</pre></div><div class="task-ending"><h2>Task Ending</h2><pre>{{ task_ending }}</pre> </div>'
+            messageElement.innerHTML = "<div class='stop'>" + message + "</div>";
+            messageContainer.appendChild(messageElement);
+        }
+
+        function displaySources(sources) {
+            var messageContainer = document.getElementById("message-container");
+            var sourceMessage = document.createElement("div");
+            sourceMessage.classList.add("message", "source-message");
+
+            var sourcesArray = sources.split(","); // Split the sources string into an array
+
+            var sourcesParagraph = document.createElement("p");
+            sourcesParagraph.textContent = "Sources:";
+            sourceMessage.appendChild(sourcesParagraph);
+
+            var sourcesList = document.createElement("ul"); // Create an unordered list element
+
+            sourcesArray.forEach(function (source) {
+                var listItem = document.createElement("li"); // Create a list item element
+                var link = document.createElement("a"); // Create an anchor element
+
+                link.href = source;
+                link.target = "_blank";
+                link.textContent = source;
+
+                listItem.appendChild(link); // Append the anchor element to the list item
+                sourcesList.appendChild(listItem); // Append the list item to the sources list
+            });
+
+            sourceMessage.appendChild(sourcesList); // Append the sources list to the source message
+            messageContainer.appendChild(sourceMessage);
+        }
+
+    </script>
 </body>
 
 </html>

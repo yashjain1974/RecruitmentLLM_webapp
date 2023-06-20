@@ -8,14 +8,19 @@ from langchain.llms import BaseLLM
 from langchain.vectorstores.base import VectorStore
 from pydantic import BaseModel, Field
 from langchain.chains.base import Chain
-
+from langchain.agents import create_csv_agent
 from langchain.vectorstores import FAISS
 from langchain.docstore import InMemoryDocstore
 from langchain.agents import ZeroShotAgent, Tool, AgentExecutor
 from langchain import OpenAI, LLMChain
 from langchain.tools import DuckDuckGoSearchRun
+import firebase_admin
+from firebase_admin import db, credentials
+
 import os
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = 'Enter your own api key'
+cred = credentials.Certificate("credentials.json")
+firebase_admin.initialize_app(cred, {"databaseURL": "https://babyagi-bot-default-rtdb.firebaseio.com"})
 class TaskCreationChain(LLMChain):
     """Chain to generates tasks."""
 
@@ -63,13 +68,19 @@ class TaskPrioritizationChain(LLMChain):
         )
         return cls(prompt=prompt, llm=llm, verbose=verbose)
 
-
+csv_path="data/Retail_Store.csv"
 todo_prompt = PromptTemplate.from_template(
     "You are a planner who is an expert at coming up with a todo list for a given objective. Come up with a todo list for this objective: {objective}"
 )
 todo_chain = LLMChain(llm=OpenAI(temperature=0), prompt=todo_prompt)
 search = DuckDuckGoSearchRun()
+agent = create_csv_agent(OpenAI(temperature=0), csv_path)
 tools = [
+    Tool(
+        name="CSV",
+        func=agent.run,
+        description="This tool is answering questions related to Retail store csv.",
+    ),
     Tool(
         name="Search",
         func=search.run,
@@ -80,6 +91,7 @@ tools = [
         func=todo_chain.run,
         description="useful for when you need to come up with todo lists. Input: an objective to create a todo list for. Output: a todo list for that objective. Please be very clear what the objective is!",
     ),
+    
 ]
 
 
@@ -148,6 +160,12 @@ def execute_task(
     context = _get_top_tasks(vectorstore, query=objective, k=k)
     return execution_chain.run(objective=objective, context=context, task=task)
 lis=["\n Final Result \n"]
+def convert_to_ascii_string(string):
+    ascii_string = ''
+    for char in string:
+        char_code = ord(char)
+        ascii_string += str(char_code) + '_'
+    return ascii_string.strip()
 class BabyAGI(Chain,BaseModel):
     """Controller model for the BabyAGI agent."""
 
@@ -207,22 +225,44 @@ class BabyAGI(Chain,BaseModel):
         num_iters = 0
         output = {}
         lis.clear()
+        i=0
+        ref = db.reference()
+        ref.delete()
 
-        while True:
+        asciiQuestion=convert_to_ascii_string(objective)
+       
+        
+
+
+        while (True ):
             if self.task_list:
+                isStopped=db.reference(f"/{asciiQuestion}/isStopped/").get()
+               
                 output["task_list"] = self.print_task_list()
+                db.reference(f"/{asciiQuestion}/").update({f"{i}_task_list": output["task_list"]})
+                isStopped=db.reference(f"/{asciiQuestion}/isStopped/").get()
+                
 
                 # Step 1: Pull the first task
                 task = self.task_list.popleft()
                 output["next_task"] = self.print_next_task(task)
+                db.reference(f"/{asciiQuestion}/").update({f"{i}_next_task": output["next_task"]})
+                isStopped=db.reference(f"/{asciiQuestion}/isStopped/").get()
+               
+                
 
                 # Step 2: Execute the task
                 result = execute_task(
                     self.vectorstore, self.execution_chain, objective, task["task_name"]
+
                 )
+                isStopped=db.reference(f"/{asciiQuestion}/isStopped/").get()
+               
                 this_task_id = int(task["task_id"])
                 output["task_result"] = self.print_task_result(result)
-
+                db.reference(f"/{asciiQuestion}/").update({f"{i}_task_result": output["task_result"]})
+                # db.reference(f"/{i}/").update({"task_list": output["task_list"],"next_task": output["next_task"],"task_result": output["task_result"]})
+                isStopped=db.reference(f"/{asciiQuestion}/isStopped/").get()
                 # Step 3: Store the result in Pinecone
                 result_id = f"result_{task['task_id']}"
                 self.vectorstore.add_texts(
@@ -230,6 +270,7 @@ class BabyAGI(Chain,BaseModel):
                     metadatas=[{"task": task["task_name"]}],
                     ids=[result_id],
                 )
+                
 
                 # Step 4: Create new tasks and reprioritize task list
                 new_tasks = get_next_task(
@@ -239,6 +280,7 @@ class BabyAGI(Chain,BaseModel):
                     [t["task_name"] for t in self.task_list],
                     objective,
                 )
+                isStopped=db.reference(f"/{asciiQuestion}/isStopped/").get()
                 for new_task in new_tasks:
                     self.task_id_counter += 1
                     new_task.update({"task_id": self.task_id_counter})
@@ -251,10 +293,14 @@ class BabyAGI(Chain,BaseModel):
                         objective,
                     )
                 )
+                isStopped=db.reference(f"/{asciiQuestion}/isStopped/").get()
+               
             num_iters += 1
-            if self.max_iterations is not None and num_iters == self.max_iterations:
+            i+=1
+            if (self.max_iterations is not None and num_iters == self.max_iterations ) or isStopped==True:
                 output["task_ending"] = "\n*****TASK ENDING*****\n"
                 output["final_result"] = lis
+
 
                 break
         return output
