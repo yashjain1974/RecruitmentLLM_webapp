@@ -17,12 +17,16 @@ from langchain.tools import DuckDuckGoSearchRun
 import firebase_admin
 from firebase_admin import db, credentials
 from dotenv.main import load_dotenv
+import pandas as pd
+
 import os
 load_dotenv()
 function_dir = os.path.dirname(os.path.realpath(__file__))
 csv_path = os.path.join(function_dir, 'credentials.json')
 cred = credentials.Certificate(csv_path)
 firebase_admin.initialize_app(cred, {"databaseURL": "https://baby-agi-bot-default-rtdb.firebaseio.com"})
+print(csv_path)
+
 class TaskCreationChain(LLMChain):
     """Chain to generates tasks."""
 
@@ -74,30 +78,34 @@ csv_path = os.path.join(function_dir, 'Retail_Store.csv')
 todo_prompt = PromptTemplate.from_template(
     "You are a planner who is an expert at coming up with a todo list for a given objective. Come up with a todo list for this objective: {objective}"
 )
-todo_chain = LLMChain(llm=OpenAI(temperature=0), prompt=todo_prompt)
+todo_chain = LLMChain(llm=OpenAI(temperature=0.1), prompt=todo_prompt)
 search = DuckDuckGoSearchRun()
-agent = create_csv_agent(OpenAI(temperature=0), csv_path)
+agent = create_csv_agent(OpenAI(temperature=1), csv_path)
+col_names = " | ".join(pd.read_csv(csv_path).keys())
+print(col_names)
 tools = [
-    Tool(
-        name="CSV",
-        func=agent.run,
-        description="This tool is answering questions related to Retail store csv.",
-    ),
+    
     Tool(
         name="Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events",
+        description="useful for when you need to answer questions about current events.",
     ),
     Tool(
         name="TODO",
         func=todo_chain.run,
         description="useful for when you need to come up with todo lists. Input: an objective to create a todo list for. Output: a todo list for that objective. Please be very clear what the objective is!",
     ),
+    Tool(
+        name="CSV",
+        func=agent.run,
+       description="useful for when you need to answer questions related to the csv data given to you. First look at the column names and then form a valid question based on the columns. The CSV data contains the following columns:" + col_names + "Ask questions to the csv agent in natural language only.",
+    ),
     
 ]
 
 
-prefix = """You are an AI who performs one task based on the following objective: {objective}. Take into account these previously completed tasks: {context}."""
+prefix = """You are an AI who performs one task based on the following objective: {objective}. Take into account these previously completed tasks: {context}. You are provided the inventory data of a company. If you think that the question asked to you is related to the inventory data, then only use the csv agent"""
+
 suffix = """Question: {task}
 {agent_scratchpad}"""
 prompt = ZeroShotAgent.create_prompt(

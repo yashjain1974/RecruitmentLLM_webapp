@@ -118,10 +118,6 @@
             cursor: pointer;
         }
 
-        .stop_iter {
-            color: red;
-        }
-
         .footer {
             text-align: center;
             font-size: 1.25rem;
@@ -276,14 +272,20 @@
         var submitButton = document.querySelector(".input-container button");
         function showSpinner() {
             var spinner = document.getElementById("spinner");
+            var button = document.getElementById("stopButton");
             spinner.style.display = "block"; // Show the spinner
+            button.style.display = "block";
         }
 
         function hideSpinner() {
             var spinner = document.getElementById("spinner");
+            var button = document.getElementById("stopButton");
             spinner.style.display = "none"; // Hide the spinner
+            button.style.display = "none"; // Hide the spinner
+
         }
 
+        
         hideSpinner();
         function handleKeyDown(event) {
             if (event.keyCode === 13) {
@@ -326,7 +328,7 @@
 
 
 
-            var dataRef = database.ref("/");
+            var dataRef = database.ref(`/${asciiQuestion}/`);
 
 
 
@@ -336,7 +338,7 @@
 
             function updateContent(snapshot) {
                 console.log(asciiQuestion)
-                var currentSnapshot = snapshot.val()[asciiQuestion];
+                var currentSnapshot = snapshot.val();
 
                 if (previousSnapshot !== null) {
                     // Get the keys of newly added items

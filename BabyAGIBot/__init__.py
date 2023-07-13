@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 import os
 from langchain.llms import OpenAI
-from bot_app import BabyAGI
+from package.bot_app import BabyAGI
 import faiss
 from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
@@ -16,6 +16,7 @@ load_dotenv()
 
 embeddings_model = OpenAIEmbeddings()
 embedding_size = 1536
+print(embedding_size)
 index = faiss.IndexFlatL2(embedding_size)
 vectorstore = FAISS(embeddings_model.embed_query, index, InMemoryDocstore({}), {})
 
@@ -93,5 +94,5 @@ def serve_openapi_yaml():
 
 if __name__ == '__main__':
     # serve(app, host="0.0.0.0", port=80)
-    app.run(host='0.0.0.0', port=80)
+    app.run()
 
