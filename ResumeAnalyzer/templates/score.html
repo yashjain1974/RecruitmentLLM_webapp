@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Validation Score</title>
+    <!-- Add Bootstrap CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add your custom CSS file -->
+    <style>
+        /* static/style.css */
+
+body {
+    background-color: #f8f9fa;
+}
+nav {
+      padding: 1rem;
+      background-color: rgb(236, 182, 101);
+      border-bottom: 1px solid;
+      border-color: #e1e7f0;
+      display: flex;
+      justify-content: space-between;
+      gap: 50vw;
+    }
+
+    nav .nav-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+
+.container {
+    max-width: 600px;
+}
+
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+    margin-top: 20px;
+}
+.preformatted-text {
+            white-space: pre-wrap;
+            font-family: monospace;
+            /* Optional: To use a monospace font like typical <pre> tags */
+            /* Add any additional styling you want for the <p> tag here */
+        }
+
+/* You can add more custom styles here as needed */
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-text">Home</div>
+      
+      </nav>
+    <div class="container mt-5">
+        <h1 class="mb-4">Validation Score</h1>
+        <div class="card">
+            <div class="card-body">
+                <p class="preformatted-text "><strong>Question:</strong> {{ question }}</p>
+                <p class="preformatted-text "><strong>Answer:</strong> {{ answer }}</p>
+                <p class="h4"><strong>Score:</strong> {{ score }}</p>
+            </div>
+        </div>
+        <a href="/interview" class="btn btn-primary mt-3">Next Question</a>
+    </div>
+
+    <!-- Add Bootstrap JS (optional, but needed for certain features) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  
+</body>
+</html>

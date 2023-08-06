@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <title>Brainlox App</title>
+  <style>
+    /* body */
+    body {
+      background-color: #efefef;
+      font-family: 'Karla', sans-serif;
+    }
+
+    nav {
+      padding: 1rem;
+      background-color: rgb(236, 182, 101);
+      border-bottom: 1px solid;
+      border-color: #e1e7f0;
+      display: flex;
+      justify-content: space-between;
+      gap: 50vw;
+    }
+
+    nav .nav-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .main-content .wizard-form .progressbar-list::before {
+      content: " ";
+      background-color: rgb(155, 155, 155);
+      border: 10px solid #fff;
+      border-radius: 50%;
+      display: block;
+      width: 30px;
+      height: 30px;
+      margin: 9px auto;
+      box-shadow: 1px 1px 3px #606060;
+      transition: all;
+    }
+
+    .main-content .wizard-form .progressbar-list::after {
+      content: "";
+      background-color: rgb(155, 155, 155);
+      padding: 0px 0px;
+      position: absolute;
+      top: 14px;
+      left: -50%;
+      width: 100%;
+      height: 2px;
+      margin: 9px auto;
+      z-index: -1;
+      transition: all 0.8s;
+    }
+
+    .main-content .wizard-form .progressbar-list.active::after {
+      background-color: #763cb0;
+    }
+
+    .main-content .wizard-form .progressbar-list:first-child::after {
+      content: none;
+    }
+
+    .main-content .wizard-form .progressbar-list.active::before {
+      font-family: "Font Awesome 5 free";
+      content: "\f00c";
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      padding: 6px;
+      background-color: #763cb0;
+      border: 1px solid #763cb0;
+      box-shadow: 0 0 0 7.5px rgb(118 60 176 / 11%);
+    }
+
+    .progressbar-list {
+      color: #6f787d;
+    }
+
+    .active {
+      color: #000;
+    }
+
+    /* card */
+    .card img {
+      width: 40px;
+    }
+
+    .card {
+      border: 3px solid rgb(145 145 145);
+      cursor: pointer;
+    }
+
+    .active-card {
+      color: #763cb0;
+      font-weight: bold;
+      border: 3px solid #763cb0;
+    }
+
+    .form-check-input:focus {
+      box-shadow: none;
+    }
+
+    .bg-color-info {
+      background-color: #00d69f;
+    }
+
+    .border-color {
+      border-color: #ececec;
+    }
+
+    .btn {
+      padding: 16px 30px;
+    }
+
+    .back-to-wizard {
+      transform: translate(-50%, -139%) !important;
+    }
+
+    .bg-success-color {
+      background-color: #87D185;
+    }
+
+    .bg-success-color:focus {
+      box-shadow: 0 0 0 0.25rem rgb(55 197 20 / 25%);
+    }
+
+    /* CSS Styles */
+    #multiStepForm {
+      padding: 10px;
+      border: 1px solid black;
+      box-shadow: 5px 5px 8px 5px #888888;
+
+    }
+
+    /* Center the wizard row */
+    #wizardRow {
+      justify-content: center;
+    }
+
+    /* Add some spacing and padding */
+    .wizard-form {
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    /* Style the progress bar */
+    .progressbar {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progressbar-list {
+      display: flex;
+      align-items: center;
+      color: rgb(123, 122, 122);
+    }
+
+    .progress-icon {
+      margin-right: 0.5rem;
+    }
+
+    /* Adjust the width based on screen size */
+    @media (max-width: 576px) {
+      .progressbar-list {
+        width: 20%;
+      }
+
+    }
+
+    /* Add some colors and hover effect */
+    .progressbar-list.active {
+      /* background-color: #007bff; */
+      color: #000000;
+      /* border-bottom: 2px solid rgb(34, 255, 0); */
+      /* padding-bottom: 2px; */
+      cursor: default;
+    }
+
+    .progressbar-list:hover:not(.active) {
+      background-color: #e9ecef;
+      cursor: pointer;
+    }
+
+    /* Center the text within the progress bar */
+    .progressbar-list span {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Adjust the height of the progress bar based on screen size */
+    @media (max-width: 768px) {
+      .progressbar-list {
+        height: 3rem;
+      }
+
+    }
+
+    /* Increase the size of the progress icon */
+    .progress-icon {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section>
+    <nav>
+      <div class="nav-text">Home</div>
+      
+    </nav>
+    <div class="container">
+
+      <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+          <div class="container">
+            <h1 class="text-center mt-3">Interview Bot🤖</h1>
+            <p class="text-center"> Welcome! To tailor your recruitment experience, please complete the Interview
+              questions. Your journey to opportunity starts now.</p>
+            <hr>
+           
+              <div class="col-md-10 text-center">
+                <div class="wizard-form py-5 my-2">
+                  <ul id="progressBar" class="progressbar">
+                    
+                   
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <hr>
+          
+
+          <form id="multiStepForm" action="{{ url_for('interview') }}">
+            <!-- Step 1 -->
+            <div class="step">
+              <h3 class="fw-bold pt-5 text-center">Personal Information</h3>
+              <p style="color: red;">All fields are mandatory *</p>
+              <div class="mb-4">
+                <label for="fullName" class="form-label">Full Name:</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" required>
+              </div>
+              <!-- <div class="mb-4">
+                <label for="preferredName" class="form-label">Preferred Name:</label>
+                <input type="text" class="form-control" id="preferredName" name="preferredName">
+              </div> -->
+              <div class="mb-4">
+                <label for="contactNumber" class="form-label">Contact Number:</label>
+                <input type="text" class="form-control" id="contactNumber" name="contactNumber" required>
+              </div>
+              <!-- <div class="mb-4">
+                    <label for="okayToText" class="form-label">Okay to Text:</label>
+                    <input type="text" class="form-control" id="okayToText" >
+                  </div> -->
+              <div class="mb-4">
+                <label for="emailAddress" class="form-label">Email address:</label>
+                <input type="email" class="form-control" id="emailAddress" name="emailAddress" required>
+              </div>
+
+              <button type="button" class="btn btn-primary mb-3 next">Next</button>
+              <!-- <button type="button" class="btn btn-secondary mb-3 skip">Skip</button> -->
+            </div>
+
+           
+
+            <!-- Step 3 -->
+           
+            <div class="step">
+              <h3 class="fw-bold pt-5">Done</h3>
+            
+                <!-- success message -->
+                
+              <p>Are you sure you want to submit the form </p>
+              <p>After submitting form you will be redirected to Interview section </p>
+              <p class="h4">There are 10 questions to be asked in interview. </p>
+              <button type="button" class="btn btn-primary prev">Previous</button>
+              <input type="submit" value="Submit" class="btn btn-primary">
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- /section -->
+</body>
+<script>
+
+
+  // Get form elements and steps
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("multiStepForm");
+    const steps = Array.from(form.getElementsByClassName("step"));
+    const progressBar = document.getElementById("progressBar");
+    const progressBarItems = Array.from(progressBar.getElementsByTagName("li"));
+
+    let currentStep = 0;
+    const formData = {}; // Object to store form data
+
+    function updateProgressBar() {
+      progressBarItems.forEach((item, index) => {
+        if (index < currentStep) {
+          item.classList.add("active");
+        } else {
+          item.classList.remove("active");
+        }
+      });
+    }
+
+    function showStep(stepIndex) {
+      steps.forEach((step, index) => {
+        if (index === stepIndex) {
+          step.style.display = "block";
+        } else {
+          step.style.display = "none";
+        }
+      });
+
+      currentStep = stepIndex;
+      updateProgressBar();
+    }
+
+    function navigateToNextStep() {
+      const currentStepFields = Array.from(steps[currentStep].querySelectorAll("input")).filter(field => field.id !== '');
+      console.log(currentStepFields);
+
+      // Check if it is Step 1
+      if (currentStep === 0) {
+        let isStepValid = true;
+
+        currentStepFields.forEach(field => {
+          if (!field.value) {
+            isStepValid = false;
+            field.classList.add("is-invalid");
+          } else {
+            field.classList.remove("is-invalid");
+            // Store field value in formData object
+            formData[field.id] = field.value;
+          }
+        });
+
+        if (!isStepValid) {
+          return; // Don't proceed to the next step if Step 1 fields are not filled
+        }
+      } else {
+        currentStepFields.forEach(field => {
+          // Store field value in formData object
+          formData[field.id] = field.value;
+        });
+      }
+
+      showStep(currentStep + 1);
+    }
+    function navigateToPreviousStep() {
+      showStep(currentStep - 1);
+    }
+    function skipToNextStep() {
+      showStep(currentStep + 1);
+    }
+
+
+    // form.addEventListener("submit", function (e) {
+    //   // e.preventDefault();
+    //   // // Convert formData object to JSON string
+    //   // const jsonData = JSON.stringify(formData);
+    //   // console.log(jsonData); // Display JSON data (you can save it to a file or send it to a server)
+
+    //   // Reset form and formData object
+    //   // form.reset();
+    //   // Object.keys(formData).forEach(key => delete formData[key]);
+
+    //   // // Reset progress bar and show Step 1
+    //   // showStep(0);
+    // });
+
+    const nextButtons = Array.from(form.getElementsByClassName("next"));
+    const skipButtons = Array.from(form.getElementsByClassName("skip"));
+    skipButtons.forEach(button => {
+      button.addEventListener("click", skipToNextStep);
+    });
+    nextButtons.forEach(button => {
+      button.addEventListener("click", navigateToNextStep);
+    });
+
+    const prevButtons = Array.from(form.getElementsByClassName("prev"));
+    prevButtons.forEach(button => {
+      button.addEventListener("click", navigateToPreviousStep);
+    });
+
+    showStep(currentStep);
+  });
+
+</script>
+
+</html>

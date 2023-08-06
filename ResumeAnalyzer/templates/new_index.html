@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recruitment Question</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+      background-color: #efefef;
+      font-family: 'Karla', sans-serif;
+    }
+
+        nav {
+      padding: 1rem;
+      background-color: rgb(236, 182, 101);
+      border-bottom: 1px solid;
+      border-color: #e1e7f0;
+      display: flex;
+      justify-content: space-between;
+      
+    }
+
+        nav .nav-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo {
+            width: 8rem;
+            height: auto;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .interview-bot-title {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .submit-button {
+            display: block;
+            margin: 1.5rem auto;
+        }
+        
+        .question-card {
+            border: 1px solid #e1e7f0;
+            padding: 1rem;
+            background-color: #ffffff; /* White background for the question card */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .preformatted-text {
+            white-space: pre-wrap;
+            font-family: monospace;
+            /* Optional: To use a monospace font like typical <pre> tags */
+            /* Add any additional styling you want for the <p> tag here */
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+    <nav>
+        <div class="nav-text">Home</div>
+       
+    </nav>
+
+    <h1 class="interview-bot-title">Interview Bot 🤖</h1>
+    <p style="color: red;text-align: center;">Don`t refresh the page otherwise question will skip and score will be 0 *</p>
+
+    <hr>
+    <div class="container">
+        <div class="question-card">
+            
+            <!-- <h2 class="mb-4">Welcome to the Interview Bot!</h2> -->
+            <p class="h3 text-center">Question {{question_count}}:</p>
+            <p class="h4 preformatted-text">{{ question }}</p>
+            <form action="/validate" method="post">
+                <div class="form-group">
+                    <input type="hidden" name="question" value="{{ question }}">
+                    <label for="candidate_answer">Your Answer:</label>
+                    <input type="text" class="form-control" id="candidate_answer" name="candidate_answer">
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary submit-button">Submit Answer</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

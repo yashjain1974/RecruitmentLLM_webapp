@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background for the body */
+        }
+        nav {
+      padding: 1rem;
+      background-color: rgb(236, 182, 101);
+      border-bottom: 1px solid;
+      border-color: #e1e7f0;
+      display: flex;
+      justify-content: space-between;
+      gap: 50vw;
+    }
+
+    nav .nav-text {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            border: 1px solid #e1e7f0;
+            border-radius: 8px;
+            background-color: #ffffff; /* White background for the container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .thank-you-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #007bff; /* Blue color for the title */
+        }
+
+        .thank-you-message {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #6c757d; /* Gray color for the message */
+        }
+
+        .total-score {
+            text-align: center;
+            font-size: 2rem;
+            color: #28a745; /* Green color for the total score */
+            margin-top: 2rem;
+            font-weight: bold;
+        }
+
+        .go-back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: #007bff; /* Blue color for the link */
+        }
+
+        .go-back-link:hover {
+            text-decoration: underline; /* Underline the link on hover */
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-text">Home</div>
+       
+      </nav>
+    <div class="container">
+        <h1 class="thank-you-title">Thank You</h1>
+        <p class="thank-you-message">Thank you for participating in the Interview quiz!</p>
+        <p class="total-score">Your Score:{{ total_score }}/100</p>
+        <a href="/" class="go-back-link">Go Back to Homepage</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Parser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        nav {
+            padding: 20px;
+            background-color: rgb(236, 182, 101);
+            border-bottom: 1px solid;
+            border-color: #e1e7f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        nav .nav-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo {
+            width: 8rem;
+            height: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .preformatted-text {
+            white-space: pre-wrap;
+            font-family: monospace;
+            /* Optional: To use a monospace font like typical <pre> tags */
+            /* Add any additional styling you want for the <p> tag here */
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        #loading-spinner {
+            display: none;
+            margin: 20px auto;
+            border: 4px solid rgba(0, 0, 0, 0.3);
+            border-top: 4px solid #333;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #fdfdfd;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control-file {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            background-color: #ff8400;
+            border: 1px solid #ffa200;
+            border-radius: 5px;
+            color: #030303;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #b3ad00;
+            border: 1px solid #fcd61a;
+        }
+
+        .interview-bot-title {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .form-group-btn {
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+    <nav>
+        <div class="nav-text">Home</div>
+       
+    </nav>
+    <div class="container">
+        <h1 class="interview-bot-title">Job Analyzer</h1>
+        {% if error %}
+        <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" onsubmit="showSpinner()">
+            <p style="color:red">Upload your Job description</p>
+            <div class="form-group">
+                <input type="file" class="form-control-file" name="file" accept=".pdf">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Upload">
+            </div>
+            <!-- <form id="multiStepForm" action="{{ url_for('welcome') }}">
+                <input type="submit" class="btn btn-primary" value="Want to create cover letter for your job">
+            </form> -->
+        </form>
+        
+        <div id="loading-spinner"></div>
+        {% if parsed_resume %}
+        <p class="preformatted-text">{{parsed_resume}}</p>
+        {% endif %}
+    </div>
+    <div class="form-group-btn">
+        <form id="multiStepForm" action="{{ url_for('welcome') }}">
+            <input type="submit" class="btn btn-primary" value="Go to Interview Window">
+        </form>
+        
+    </div>
+</div>
+
+
+    <script>
+        function showSpinner() {
+            document.getElementById('loading-spinner').style.display = 'block';
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

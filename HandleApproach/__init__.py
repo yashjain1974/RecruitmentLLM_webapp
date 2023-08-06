@@ -1,5 +1,5 @@
 import azure.functions as func
-from BabyAGIBot import app
+from ResumeAnalyzer import app
 
 
 def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:

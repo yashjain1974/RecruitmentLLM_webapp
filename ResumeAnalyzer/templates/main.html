@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze CV or Job Description</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.19.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f2f2f2;
+        }
+
+        nav {
+            padding: 20px;
+            background-color: rgb(236, 182, 101);
+            border-bottom: 1px solid;
+            border-color: #e1e7f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        nav .nav-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 100px auto;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+        }
+
+        .btn-analyze-cv {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-analyze-job {
+            background-color: #a73b28;
+            color: #fff;
+            border: none;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="section">
+        <nav>
+            <div class="nav-text">Home</div>
+        </nav>
+        <h1 style="text-align: center;">Welcome to our Recruitment website</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Analyze CV</h2>
+                            <a href="/analyze_cv" class="btn btn-analyze-cv">
+                                Analyze CV <i class="bi bi-file-text"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Analyze Job Description</h2>
+                            <a href="/analyze_job" class="btn btn-analyze-job">
+                                Analyze Job Description <i class="bi bi-briefcase"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group-btn">
+                <form id="multiStepForm" action="{{ url_for('welcome') }}">
+                    <input type="submit" class="btn btn-primary" value="Go to Interview Window">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

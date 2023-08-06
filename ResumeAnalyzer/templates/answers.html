@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submitted Answers</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Submitted Answers:</h1>
+        <ul class="list-group">
+            {% for question, answer in answers.items() %}
+            <li class="list-group-item">
+                <strong>{{ question }}:</strong><br>Answer: {{ answer }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
