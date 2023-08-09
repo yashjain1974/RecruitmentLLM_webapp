@@ -115,42 +115,51 @@
     </style>
 </head>
 <body>
-    <div class="section">
-    <nav>
-        <div class="nav-text">Home</div>
-       
-    </nav>
-    <div class="container">
-        <h1 class="interview-bot-title">Job Analyzer</h1>
-        {% if error %}
-        <p class="error-message">{{ error }}</p>
-        {% endif %}
-        <form method="post" enctype="multipart/form-data" onsubmit="showSpinner()">
-            <p style="color:red">Upload your Job description</p>
-            <div class="form-group">
-                <input type="file" class="form-control-file" name="file" accept=".pdf">
+    <body>
+        <div class="section">
+            <nav>
+                <div class="nav-text">Home</div>
+            </nav>
+            <div class="container">
+                <h1 class="interview-bot-title">Job Analyzer</h1>
+                {% if error %}
+                <p class="error-message">{{ error }}</p>
+                {% endif %}
+                <form method="post" enctype="multipart/form-data" onsubmit="showSpinner()">
+                    <p style="color:red">Upload your Job description</p>
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" name="file" accept=".pdf">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Upload">
+                    </div>
+                </form>
+    
+                <p style="color: green;">OR</p>
+                
+                <form method="post" onsubmit="showSpinner()">
+                    <p>Enter Job Description:</p>
+                    <div class="form-group">
+                        <textarea class="form-control" name="job_description" rows="6" placeholder="Enter job description..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Analyze">
+                    </div>
+                </form>
+    
+                <div id="loading-spinner"></div>
+                {% if parsed_resume %}
+                <p class="preformatted-text">{{parsed_resume}}</p>
+                {% endif %}
             </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Upload">
+            <div class="form-group-btn">
+                <form id="multiStepForm" action="{{ url_for('welcome') }}">
+                    <input type="submit" class="btn btn-primary" value="Go to Interview Window">
+                </form>
             </div>
-            <!-- <form id="multiStepForm" action="{{ url_for('welcome') }}">
-                <input type="submit" class="btn btn-primary" value="Want to create cover letter for your job">
-            </form> -->
-        </form>
-        
-        <div id="loading-spinner"></div>
-        {% if parsed_resume %}
-        <p class="preformatted-text">{{parsed_resume}}</p>
-        {% endif %}
-    </div>
-    <div class="form-group-btn">
-        <form id="multiStepForm" action="{{ url_for('welcome') }}">
-            <input type="submit" class="btn btn-primary" value="Go to Interview Window">
-        </form>
-        
-    </div>
-</div>
-
+        </div>
+    
+    
 
     <script>
         function showSpinner() {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyze CV or Job Description</title>
+    <title>Welcome to Recruitment Automation</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Bootstrap Icons -->
@@ -13,20 +13,21 @@
     <style>
         body {
             background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
         }
 
         nav {
             padding: 20px;
             background-color: rgb(236, 182, 101);
-            border-bottom: 1px solid;
-            border-color: #e1e7f0;
+            border-bottom: 1px solid #ddd;
             display: flex;
             justify-content: space-between;
         }
 
         nav .nav-text {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
         }
 
         .container {
@@ -36,7 +37,8 @@
         }
 
         h1 {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            color: #333;
         }
 
         .btn {
@@ -53,7 +55,7 @@
         }
 
         .btn-analyze-job {
-            background-color: #a73b28;
+            background-color: #e74c3c;
             color: #fff;
             border: none;
         }
@@ -64,21 +66,28 @@
         }
 
         .card-body {
-            padding: 20px;
+            padding: 30px;
         }
 
         .card-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
+            color: #333;
         }
 
         .btn-primary {
-            background-color: #28a745;
+            background-color: #2ecc71;
             border: none;
         }
 
         .btn-primary:hover {
-            background-color: #007bff;
+            background-color: #27ae60;
+        }
+
+        .welcome-message {
+            font-size: 20px;
+            color: #777;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -86,15 +95,16 @@
 <body>
     <div class="section">
         <nav>
-            <div class="nav-text">Home</div>
+            <div class="nav-text">Recruitment Automation</div>
         </nav>
-        <h1 style="text-align: center;">Welcome to our Recruitment website</h1>
-        <div class="container">
+        <h1 class="text-center">Welcome to Our Recruitment Website</h1>
+        <div class="container" style="display: grid;">
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
                             <h2 class="card-title">Analyze CV</h2>
+                            <p class="welcome-message">Upload a candidate's CV to analyze their qualifications.</p>
                             <a href="/analyze_cv" class="btn btn-analyze-cv">
                                 Analyze CV <i class="bi bi-file-text"></i>
                             </a>
@@ -104,7 +114,8 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="card-title">Analyze Job Description</h2>
+                            <h2 class="card-title">Analyze Job</h2>
+                            <p class="welcome-message">Analyze a job description to find the best candidates.</p>
                             <a href="/analyze_job" class="btn btn-analyze-job">
                                 Analyze Job Description <i class="bi bi-briefcase"></i>
                             </a>

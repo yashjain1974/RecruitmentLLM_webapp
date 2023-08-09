@@ -244,14 +244,14 @@
             <hr>
           
 
-          <form id="multiStepForm" action="{{ url_for('interview') }}">
+          <form id="multiStepForm" action="{{ url_for('interview') }}" method="POST">
             <!-- Step 1 -->
             <div class="step">
               <h3 class="fw-bold pt-5 text-center">Personal Information</h3>
               <p style="color: red;">All fields are mandatory *</p>
               <div class="mb-4">
                 <label for="fullName" class="form-label">Full Name:</label>
-                <input type="text" class="form-control" id="fullName" name="fullName" required>
+                <input type="text" class="form-control" id="fullName" name="name" required>
               </div>
               <!-- <div class="mb-4">
                 <label for="preferredName" class="form-label">Preferred Name:</label>
@@ -267,7 +267,7 @@
                   </div> -->
               <div class="mb-4">
                 <label for="emailAddress" class="form-label">Email address:</label>
-                <input type="email" class="form-control" id="emailAddress" name="emailAddress" required>
+                <input type="email" class="form-control" id="emailAddress" name="email" required>
               </div>
 
               <button type="button" class="btn btn-primary mb-3 next">Next</button>
@@ -285,7 +285,7 @@
                 
               <p>Are you sure you want to submit the form </p>
               <p>After submitting form you will be redirected to Interview section </p>
-              <p class="h4">There are 10 questions to be asked in interview. </p>
+              <p class="h4">There are 5 questions to be asked in interview. </p>
               <button type="button" class="btn btn-primary prev">Previous</button>
               <input type="submit" value="Submit" class="btn btn-primary">
 

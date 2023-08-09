@@ -278,23 +278,62 @@
   var questionsAndAnswers = {{ questions | tojson }};
   console.log(questionsAndAnswers)
 
-  function nextQuestion() {
-    submit_ans.style.display = "block";
-    var answer = document.getElementById("answer").value;
-    // Here, you can do something with the answer if needed.
+  var timerInterval; // Store the timer interval
+var timerValue = 15; // Timer value in seconds
+function startTimer() {
+  var timerSpan = document.getElementById("timer-span");
+  timerInterval = setInterval(function () {
+    timerSpan.textContent = timerValue;
+    timerValue--;
 
-    currentIndex++;
-    if (currentIndex < questionsAndAnswers.length) {
-      document.getElementById("question").innerHTML = '<p>' + questionsAndAnswers[currentIndex] + '</p>';
-    } else {
-      document.getElementById("question").innerHTML = '<h2>All questions answered!</h2>';
+    if (timerValue < 0) {
+      clearInterval(timerInterval);
+      timerSpan.textContent = "0";
+      enableSubmitButton();
     }
-    next_q.style.display = "None";
+  }, 1000);
+}
+function enableSubmitButton() {
+  submit_ans.style.display = "block";
+  next_q.style.display = "none";
+}
+  function nextQuestion() {
+    clearInterval(timerInterval); // Clear the timer interval
+  startTimer(); // Start the timer for the next question
+  var answer = document.getElementById("answer").value;
+
+  currentIndex++;
+  if (currentIndex < questionsAndAnswers.length) {
+    document.getElementById("question").innerHTML = '<p>' + questionsAndAnswers[currentIndex] + '</p>';
+    startTimer(); // Start the timer for the next question
+    next_q.style.display = "none";
+    submit_ans.style.display = "none"; // Hide the submit button initially
+  } else {
+    document.getElementById("question").innerHTML = '<h2>All questions answered!</h2>';
+    enableSubmitButton(); // Enable the submit button when all questions are answered
   }
+}
+
+  // function nextQuestion() {
+  //   submit_ans.style.display = "block";
+  //   var answer = document.getElementById("answer").value;
+  //   // Here, you can do something with the answer if needed.
+
+  //   currentIndex++;
+  //   if (currentIndex < questionsAndAnswers.length) {
+  //     document.getElementById("question").innerHTML = '<p>' + questionsAndAnswers[currentIndex] + '</p>';
+  //   } else {
+  //     document.getElementById("question").innerHTML = '<h2>All questions answered!</h2>';
+  //   }
+  //   next_q.style.display = "None";
+  // }
+
   var questionInput = document.getElementById("question-input");
   var generatedAnswer = document.getElementById("answer");
   var result = document.getElementById("result");
+
   function submitAnswer() {
+    clearInterval(timerInterval); // Clear the timer interval
     var question = questionInput.value;
 
     if (question.trim() === "") {
@@ -327,6 +366,9 @@
     var data = JSON.stringify({ "question": question, "answer": generatedAnswer });
     xhr.send(data);
   }
+
+
+
 </script>
 
 </html>
