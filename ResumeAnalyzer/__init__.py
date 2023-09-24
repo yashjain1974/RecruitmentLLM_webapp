@@ -17,9 +17,7 @@ import fitz
 import os
 import re
 app = Flask(__name__)
-connection_str= 'DefaultEndpointsProtocol=https;AccountName=inventorycsvfile;AccountKey=xP7HRHsHdj4xsjMVAAH5bf2z9tFAqZYGSoSy5Um01kcClnL9x6vTG4se0po67sqs9AOYB7VJFO+D+ASttctKgA==;EndpointSuffix=core.windows.net'
-
-# os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+connection_str=os.getenv('AZURE_STORAGE_CONNECTION_STRING')
 
 
 print(connection_str)
