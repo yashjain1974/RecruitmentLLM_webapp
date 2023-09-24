@@ -17,13 +17,18 @@ import fitz
 import os
 import re
 app = Flask(__name__)
-connection_str= os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+connection_str= 'DefaultEndpointsProtocol=https;AccountName=inventorycsvfile;AccountKey=xP7HRHsHdj4xsjMVAAH5bf2z9tFAqZYGSoSy5Um01kcClnL9x6vTG4se0po67sqs9AOYB7VJFO+D+ASttctKgA==;EndpointSuffix=core.windows.net'
+
+# os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+
 
 print(connection_str)
 
 container_name = "csv"
 blob_service_client = BlobServiceClient.from_connection_string(conn_str=connection_str)
+
 try:
+    
     container_client = blob_service_client.get_container_client(container=container_name) # get container client to interact with the container in which images will be stored
     container_client.get_container_properties() # get properties of the container to force exception to be thrown if container does not exist
 except Exception as e:
@@ -154,13 +159,16 @@ def upload_cv():
                 resume_text = extract_text_from_pdf(temp_file_path)
                 os.remove(temp_file_path)
            
-            template = """
-        Extract information from the CV provided. Return the information grouped under the following: Contact, 
+            """
+           Extract information from the CV provided. Return the information grouped under the following: Contact, 
             Academic Background, Professional Experience, Skills, Other. Start each group following this pattern: 
-            [<GROUP NAME>], e.g. for 'Skills' do '[SKILLS]'. Return the information as detailed as possible.
+            [<GROUP NAME>], e.g. for 'Skills' do '[SKILLS]'. . Return the information as detailed as possible.
             CV:
+            """
+            template = """
+        
    
-
+provide the score of CV related to python developer position out of 10 in form of [Score] . and provide feedback points to the candidate and highlight relevant skills and project in form of list related to Python developer.
     {chat_history}
     {human_input}"""
            
@@ -273,7 +281,7 @@ def interview():
 
     # Generate a question
     random_topic = random.choice(programming_topics)
-    prompt = f"You are the hiring manager for a growing tech company. Please generate a quiz type question for a Java developer position related to  {random_topic}"
+    prompt = f"You are the hiring manager for a growing tech company. Please generate a quiz type question for a Python developer position related to  {random_topic}"
     question = generate_recruitment_question(prompt)
 
     # Increment the question count in the session
@@ -342,7 +350,7 @@ def validate():
                 "cutoff":cutoff,
 
                 "score":total_score,
-                "company_name":"Axis bank Recruitment team",
+                "company_name":"AICTE Government Recruitment",
         })
         send_email(session['email'],k)
         session.clear()  # Clear the session data after calculating the total score
